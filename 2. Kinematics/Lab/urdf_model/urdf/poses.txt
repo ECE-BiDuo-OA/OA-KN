@@ -1,3 +1,6 @@
+Copier tout ca sur le site https://mymodelrobot.appspot.com/5723943474298880 
+(dans la partie PLACE YOUR CSV)
+
 time,base_cyl1,cyl1_cyl2,cyl2_cyl3,cyl3_box
 0,0,0,0,0
 1,1.57075,0,0,0
