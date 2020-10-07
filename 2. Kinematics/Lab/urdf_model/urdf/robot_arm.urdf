@@ -36,7 +36,7 @@
 	<joint name="cyl1_cyl2" type="continuous">
         <parent link="cyl1"/>
         <child link="cyl2"/>
-        <axis xyz="0 1 0"/>
+        <axis xyz="0 -1 0"/>
         <origin xyz="0 -0.1 0.5"/>
     </joint>
     <link name="cyl2">
