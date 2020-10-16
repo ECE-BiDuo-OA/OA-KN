@@ -32,7 +32,9 @@ print()
 policy = np.random.randint(0,4,(3, 4))#random juste pour les tests faudra calculer
 
 def newState(originRow, originCol, action):
-    print(action)
+    col = originCol
+    row = originRow
+
     if action == 0: #North
         row = originRow + 1
     elif action == 1: #South
@@ -41,9 +43,7 @@ def newState(originRow, originCol, action):
         col = originCol + 1
     elif action == 3: #West
         col = originCol - 1
-    else:
-        col = originCol
-        row = originRow
+
 
     if row > 2 : row = 2
     if row < 0 : row = 0
@@ -62,41 +62,50 @@ def possibleStates(row, col):
 
 ##Value iteration
 values=np.zeros((3, 4))
+valuesFixed=[(0,3),(1,3),(1,1)]
 
-for col in range(4):
-    for row in range(3):
-        r = R[row][col]
-
-        #pour chaque action
-        #Actions : N=0, S=1, E=2, W=3
-        pList=[]
-        for action in range(4):
-            caseNorth, caseSouth, caseEast, caseWest = possibleStates(row, col)
-
-            if action == 0: #North
-                p = 0.8 * value[caseNorth[0],caseNorth[1]] \
-                  + 0.1 * value[caseEast[0],caseEast[1]] \
-                  + 0.1 * value[caseWest[0],caseWest[1]]
-            elif action == 1: #Sud
-                p = 0.8 * value[caseSouth[0],caseSouth[1]] \
-                  + 0.1 * value[caseEast[0],caseEast[1]] \
-                  + 0.1 * value[caseWest[0],caseWest[1]]
-            elif action == 2: #East
-                p = 0.8 * value[caseEast[0],caseEast[1]] \
-                  + 0.1 * value[caseNorth[0],caseNorth[1]] \
-                  + 0.1 * value[caseSouth[0],caseSouth[1]]
-            elif action == 3: #West
-                p = 0.8 * value[caseWest[0],caseWest[1]] \
-                  + 0.1 * value[caseNorth[0],caseNorth[1]] \
-                  + 0.1 * value[caseSouth[0],caseSouth[1]]
-
-            pList.append(p)
-
-        max = np.max(pList)
-
-        value[row][col] = r + gamma * max
+print("Values")
+print(values)
+print()
 
 
+for rep in range(5):
+    for col in range(4):
+        for row in range(3):
+            if (row,col) not in valuesFixed:
+                r = R[row][col]
+
+                #pour chaque action
+                #Actions : N=0, S=1, E=2, W=3
+                pList=[]
+                for action in range(4):
+                    caseNorth, caseSouth, caseEast, caseWest = possibleStates(row, col)
+
+                    if action == 0: #North
+                        p = 0.8 * values[caseNorth[0],caseNorth[1]] \
+                        + 0.1 * values[caseEast[0],caseEast[1]] \
+                        + 0.1 * values[caseWest[0],caseWest[1]]
+                    elif action == 1: #Sud
+                        p = 0.8 * values[caseSouth[0],caseSouth[1]] \
+                        + 0.1 * values[caseEast[0],caseEast[1]] \
+                        + 0.1 * values[caseWest[0],caseWest[1]]
+                    elif action == 2: #East
+                        p = 0.8 * values[caseEast[0],caseEast[1]] \
+                        + 0.1 * values[caseNorth[0],caseNorth[1]] \
+                        + 0.1 * values[caseSouth[0],caseSouth[1]]
+                    elif action == 3: #West
+                        p = 0.8 * values[caseWest[0],caseWest[1]] \
+                        + 0.1 * values[caseNorth[0],caseNorth[1]] \
+                        + 0.1 * values[caseSouth[0],caseSouth[1]]
+
+                    pList.append(p)
+
+                max = np.max(pList)
+
+                values[row][col] = r + gamma * max
+
+    print(values)
+    print()
 
 
 
