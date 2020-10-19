@@ -5,6 +5,7 @@ Made by the team :
 """
 
 import numpy as np
+import time
 
 def chooseDirection():
     n = np.random.rand()
@@ -18,9 +19,10 @@ def chooseDirection():
 #Parameters
 gamma = 0.99
 threshold = 0.000001
+mapSize=(3,4)
 
 #Creating the map
-R = np.ones((3, 4))
+R = np.ones(mapSize)
 R = R * (-0.02)
 R[0,3] = +1
 R[1,3] = -1
@@ -40,9 +42,9 @@ def newState(originRow, originCol, action):
     elif action == 3: #West
         col = originCol - 1
 
-    if row > 2 : row = 2
+    if row > mapSize[0]-1 : row = mapSize[0]-1
     if row < 0 : row = 0
-    if col > 3 : col = 3
+    if col > mapSize[1]-1 : col = mapSize[1]-1
     if col < 0 : col = 0
 
     if row ==1 and col == 1:
@@ -74,12 +76,14 @@ def prettyPolicy(policy):
 
 ##Value iteration
 print("##### Value iteration #####")
-values=np.zeros((3, 4))
+startTime=time.time()
+
+values=np.zeros(mapSize)
 fixedCells=[(0,3),(1,3),(1,1)]
 values[0,3]=+1
 values[1,3]=-1
 values[1,1]=None
-valuesOld=np.ones((3, 4))
+valuesOld=np.ones(mapSize)
 counter=0
 
 #Finding optimal Value function
@@ -87,8 +91,8 @@ while np.sum(abs(valuesOld-values)>threshold) != 0 :
     valuesOld=np.copy(values)
     counter += 1
 
-    for col in range(4):
-        for row in range(3):
+    for row in range(mapSize[0]):
+        for col in range(mapSize[1]):
             if (row,col) not in fixedCells:
                 r = R[row][col]
 
@@ -120,10 +124,10 @@ while np.sum(abs(valuesOld-values)>threshold) != 0 :
                 values[row][col] = r + gamma * maxi
 
 #Finding optimal Policy
-policy=np.ones((3, 4))*-1
+policy=np.ones(mapSize)*-1
 
-for col in range(4):
-    for row in range(3):
+for row in range(mapSize[0]):
+    for col in range(mapSize[1]):
         if (row,col) not in fixedCells:
             caseNorth, caseSouth, caseEast, caseWest = possibleStates(row, col)
 
@@ -150,8 +154,11 @@ for col in range(4):
 
             policy[row][col] = np.argmax(pList)
 
+endTime=time.time()
+diff=np.round(endTime-startTime, 7)
+
 #Affichage
-print(f"Done in {counter} iterations")
+print(f"Done in {counter} iterations in {diff} seconds")
 print("Values")
 print(values)
 print()
@@ -163,13 +170,15 @@ print()
 
 ##Policy iteration
 print("##### Policy iteration #####")
-values=np.zeros((3, 4))
+startTime=time.time()
+
+values=np.zeros(mapSize)
 fixedCells=[(0,3),(1,3),(1,1)]
 values[0,3]=+1
 values[1,3]=-1
 values[1,1]=None
-valuesOld=np.ones((3, 4))
-policy = np.random.randint(0,4,(3, 4))
+valuesOld=np.ones(mapSize)
+policy = np.random.randint(0,4,mapSize)
 for row,col in fixedCells:
     policy[row][col]=-1
 counter=0
@@ -178,8 +187,8 @@ while np.sum(abs(valuesOld-values)>threshold) != 0 :
     valuesOld=np.copy(values)
     counter += 1
 
-    for col in range(4):
-        for row in range(3):
+    for row in range(mapSize[0]):
+        for col in range(mapSize[1]):
             if (row,col) not in fixedCells:
                 r = R[row][col]
                 caseNorth, caseSouth, caseEast, caseWest = possibleStates(row, col)
@@ -228,9 +237,11 @@ while np.sum(abs(valuesOld-values)>threshold) != 0 :
 
                 policy[row][col] = np.argmax(pList)
 
+endTime=time.time()
+diff=np.round(endTime-startTime, 7)
 
 #Affichage
-print(f"Done in {counter} iterations")
+print(f"Done in {counter} iterations in {diff} seconds")
 
 print("Values")
 print(values)
@@ -238,3 +249,21 @@ print()
 
 print("Policy")
 print(prettyPolicy(policy))
+
+
+#Comments
+"""
+The Value iteration method is doing less iterations than the Policy iteration method and the time seems to be equal.
+The results (policy and value function) are the same for both methods.
+"""
+
+
+
+
+
+
+
+
+
+
+
