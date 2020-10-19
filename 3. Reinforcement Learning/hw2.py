@@ -75,6 +75,7 @@ def prettyPolicy(policy):
     return pp
 
 ##Value iteration
+print("Q1")
 print("##### Value iteration #####")
 startTime=time.time()
 
@@ -169,6 +170,7 @@ print()
 
 
 ##Policy iteration
+print("Q2")
 print("##### Policy iteration #####")
 startTime=time.time()
 
@@ -245,25 +247,10 @@ print(f"Done in {counter} iterations in {diff} seconds")
 
 print("Values")
 print(values)
-print()
 
-print("Policy")
+print("\nPolicy")
 print(prettyPolicy(policy))
 
 
 #Comments
-"""
-The Value iteration method is doing less iterations than the Policy iteration method and the time seems to be equal.
-The results (policy and value function) are the same for both methods.
-"""
-
-
-
-
-
-
-
-
-
-
-
+print("\nQ3\nThe Value iteration method is doing less iterations than the Policy iteration method and the time seems to be equal.\nThe results (policy and value function) are the same for both methods.")
