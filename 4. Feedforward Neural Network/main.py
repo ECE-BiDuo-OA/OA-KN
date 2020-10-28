@@ -117,13 +117,13 @@ R,_,_,_ = fwp(XTest,V,W)
 R=np.apply_along_axis(np.round, 0, R)
 
 print()
-print("    X            Y predicted")
+print("    X              Y predicted")
 for x,yp in zip(XTest, R):
-    assert np.sum(yp)==1 #invalid yp
-
-    yp2=int(YUnique[np.where(yp == 1)])
-
-    print("{}\t\t\t{}".format(x,yp2))
+    if np.sum(yp)==1: #valid yp
+        yp2=int(YUnique[np.where(yp == 1)])
+        print("{:20}{:^10}".format(str(x),str(yp2)))
+    else:#invalid yp
+        print("{:20}{:^10} INVALID".format(str(x),str(yp)))
 
 
 
