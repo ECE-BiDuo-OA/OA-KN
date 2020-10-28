@@ -105,25 +105,25 @@ for epoch in range(nbEpoch):
     #Computing Error
     E = error(Y,Yp)
 
-    print(E)
+    print("Error:",round(E,3))
 
     #Back Propagation
     V,W = bp(V,W,av,aw,Y,Yp,Fb,Xb,K)
 
 
-
-
-XTest=[[ 3.9601,  1.4057,  0.4019]]
-
-R,_,_,_=fwp(XTest,V,W)
-
+############# TESTING #############
+XTest=[[2, 2, -3],[3, 4, 3],[4.5, 1.5, 0]]
+R,_,_,_ = fwp(XTest,V,W)
 R=np.apply_along_axis(np.round, 0, R)
 
-for i in range(len(XTest)):
-    rCateg=R[i]
-    r=sum(YUnique*rCateg)
-    print(XTest[i], " \t", rCateg, " \t", r)
+print()
+print("    X            Y predicted")
+for x,yp in zip(XTest, R):
+    assert np.sum(yp)==1 #invalid yp
 
+    yp2=int(YUnique[np.where(yp == 1)])
+
+    print("{}\t\t\t{}".format(x,yp2))
 
 
 
