@@ -105,7 +105,7 @@ for epoch in range(nbEpoch):
     #Computing Error
     E = error(Y,Yp)
 
-    print("Error:",round(E,3))
+    print(f"Epoch {epoch+1:>{len(str(nbEpoch))}}/{nbEpoch}:  Error: {E:.2f}")
 
     #Back Propagation
     V,W = bp(V,W,av,aw,Y,Yp,Fb,Xb,K)
@@ -117,13 +117,14 @@ R,_,_,_ = fwp(XTest,V,W)
 R=np.apply_along_axis(np.round, 0, R)
 
 print()
-print("    X              Y predicted")
+print(" X1   X2   X3     Y (predicted)")
 for x,yp in zip(XTest, R):
     if np.sum(yp)==1: #valid yp
         yp2=int(YUnique[np.where(yp == 1)])
-        print("{:20}{:^10}".format(str(x),str(yp2)))
+        print("{:< 5.1f}{:< 5.1f}{:< 5.1f}   {:d}".format(x[0],x[1],x[2],yp2))
+        #print("{:20}{:^10}".format(str(x),str(yp2)))
     else:#invalid yp
-        print("{:20}{:^10} INVALID".format(str(x),str(yp)))
+        print("{:< 5.1f}{:< 5.1f}{:< 5.1f}   INVALID {}".format(x[0],x[1],x[2],yp))
 
 
 
