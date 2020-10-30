@@ -1,3 +1,9 @@
+"""
+Made by the team :
+    Kishor JOGARAJAH
+    Neil SEGARD
+"""
+
 import numpy as np
 
 def getData(file):
@@ -14,7 +20,7 @@ def getData(file):
 
     Y=np.asarray(Y)
 
-    return X,Y,YUnique
+    return X, Y, YUnique, YData
 
 def sigmoid(x):
     return 1/(1+np.exp(-x))
@@ -45,7 +51,10 @@ def fwp(X,V,W):
     return Yp,F,Fb,Xb
 
 def error(Y,Yp):
-    return np.sum(np.square(Yp - Y))
+    tmp=np.round(Yp)
+    tmp=np.square(tmp - Y)
+    tmp=np.sum(tmp)
+    return tmp
 
 def bp(V,W,av,aw,Y,Yp,Fb,Xb,K):
     I=len(Y)
@@ -79,14 +88,14 @@ def bp(V,W,av,aw,Y,Yp,Fb,Xb,K):
     return V,W
 
 ############# SETTINGS #############
-K=5
+K=3
 nbEpoch=500
 av=0.06
 aw=av
 
 ############# INITIALIZING #############
 #Getting X and Y
-X, Y, YUnique = getData("data_ffnn.txt")
+X, Y, YUnique, Ydata = getData("data_ffnn.txt")
 
 N=len(X[0]) #number of neuron in the input layer
 J=len(Y[0]) #number of neuron in the output layer
@@ -105,10 +114,42 @@ for epoch in range(nbEpoch):
     #Computing Error
     E = error(Y,Yp)
 
-    print(f"Epoch {epoch+1:>{len(str(nbEpoch))}}/{nbEpoch}:  Error: {E:.2f}")
+    if (epoch+1)%20==0:
+        print(f"Epoch {epoch+1:>{len(str(nbEpoch))}}/{nbEpoch}:  Error: {E:.2f}")
+
+    if E==0:
+        print("\nStopping because the error is null")
+        break
 
     #Back Propagation
     V,W = bp(V,W,av,aw,Y,Yp,Fb,Xb,K)
+
+YpRound=np.round(Yp)
+correct = np.sum(YpRound==Y,axis=1)==3
+accuracy = np.sum(correct)/len(correct)
+print("\nAccuracy : {:.1f}%".format(accuracy*100))
+
+############# TESTING #############
+print("\nOptimal V:")
+print(np.round(V,1))
+
+print("\nOptimal W:")
+print(np.round(W,1))
+
+############# COMPARING #############
+"""
+#This is used to compare all the predicted values (in the training set) with the real values
+R,_,_,_ = fwp(X,V,W)
+R=np.apply_along_axis(np.round, 0, R)
+
+print("\n X1   X2   X3     Yp")
+for x, yp, y in zip(X, R, Ydata):
+    if np.sum(yp)==1: #valid yp
+        yp2=int(YUnique[np.where(yp == 1)])
+        print("{:< 5.1f}{:< 5.1f}{:< 5.1f}   {:d}   {:d}".format(x[0],x[1],x[2],yp2,int(y[0])))
+    else:#invalid yp
+        print("{:< 5.1f}{:< 5.1f}{:< 5.1f}   INVALID {}".format(x[0],x[1],x[2],yp))
+"""
 
 
 ############# TESTING #############
@@ -122,7 +163,6 @@ for x,yp in zip(XTest, R):
     if np.sum(yp)==1: #valid yp
         yp2=int(YUnique[np.where(yp == 1)])
         print("{:< 5.1f}{:< 5.1f}{:< 5.1f}   {:d}".format(x[0],x[1],x[2],yp2))
-        #print("{:20}{:^10}".format(str(x),str(yp2)))
     else:#invalid yp
         print("{:< 5.1f}{:< 5.1f}{:< 5.1f}   INVALID {}".format(x[0],x[1],x[2],yp))
 
