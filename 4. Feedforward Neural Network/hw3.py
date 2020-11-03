@@ -88,9 +88,9 @@ def bp(V,W,av,aw,Y,Yp,Fb,Xb,K):
     return V,W
 
 ############# SETTINGS #############
-K=3
+K=5
 nbEpoch=500
-av=0.06
+av=0.1
 aw=av
 
 ############# INITIALIZING #############
@@ -114,8 +114,8 @@ for epoch in range(nbEpoch):
     #Computing Error
     E = error(Y,Yp)
 
-    if (epoch+1)%20==0:
-        print(f"Epoch {epoch+1:>{len(str(nbEpoch))}}/{nbEpoch}:  Error: {E:.2f}")
+    #if (epoch+1)%20==0:
+    print(f"Epoch {epoch+1:>{len(str(nbEpoch))}}/{nbEpoch}:  Error: {E:.2f}")
 
     if E==0:
         print("\nStopping because the error is null")
