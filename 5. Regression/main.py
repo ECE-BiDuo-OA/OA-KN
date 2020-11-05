@@ -10,7 +10,7 @@ my_data = genfromtxt('data.csv', delimiter=',')
 
 t=my_data.T[0]
 z=my_data.T[1]
-z=np.round(z,2)#A SUPPRIMER
+#z=np.round(z,2)#A SUPPRIMER
 print("Done")
 
 ##Plot
@@ -53,35 +53,62 @@ print("Done")
 
 
 ##BGD
-theta = np.random.rand(N+1)*2-1
-#theta = np.random.randint(-5,5,N+1) c'est pire
-alpha=0.0001
+def BGD():
+    theta = np.random.rand(N+1)*2-1
+    alpha=0.2
 
-E=11
-while E>10:
-    h=np.dot(theta,Xtrain.T)
-    g=h-Ytrain
+    E=11
+    while E>10:
+        h=np.dot(theta,Xtrain.T)
+        g=h-Ytrain
 
-    for n in range(N+1):
-        sum=0
-        for i in range(I):
-            sum += g[i]*Xtrain[i][n]
+        for n in range(N+1):
+            sum=0
+            for i in range(I):
+                sum += g[i]*Xtrain[i][n]
 
-        theta[n] = theta[n] - alpha * sum
+            theta[n] = theta[n] - alpha * sum
 
+        h=np.dot(theta,Xtrain.T)
+        E=np.sum(np.square(h-Ytrain))/2
+        print(E)
+
+    return theta
+
+##SGD
+def SGD():
+    theta = np.random.rand(N+1)*2-1
+    alpha=0.2
+
+    E=11
+    while E>10:
+        h=np.dot(theta,Xtrain.T)
+        g=h-Ytrain
+
+        for n in range(N+1):
+            i = np.random.randint(1, I)
+            theta[n] = theta[n] - alpha * g[i] * Xtrain[i][n]
+
+        h=np.dot(theta,Xtrain.T)
+        E=np.sum(np.square(h-Ytrain))/2
+        print(E)
+
+    return theta
+
+##CFS
+def CFS():
+    theta = np.dot(np.dot(np.linalg.inv(np.dot(Xtrain.T, Xtrain)), Xtrain.T), Ytrain)
+
+    return theta
+
+def computeError(theta):
     h=np.dot(theta,Xtrain.T)
     E=np.sum(np.square(h-Ytrain))/2
-    print(E)
+    return E
 
-print(E)
+#thetaOpt=BGD()
+thetaOpt=SGD()
+#thetaOpt=CFS()
 
-
-
-
-
-
-
-
-
-
-
+E=computeError(thetaOpt)
+print("Error ",E)
