@@ -20,124 +20,113 @@ plt.show()
 print("Done")
 """
 
-##Variables
-K=3 #number of test set
-N=150 #number of features
-J=1 #size of a prediction
+class program():
+    def __init__(self, K, N, J): #creation des Xtrain, Xtest, Ytrain, Ytest
+        self.K=K #number of test set
+        self.N=N #number of features
+        self.J=J #size of a prediction
 
-print("\nQ2 Generating sets...", end="")
-X=[]
-Y=[]
+        X=[]
+        Y=[]
 
-for i in range(len(z) - N - (J-1)):
-    X.append(z[i:i+N])
-    Y.append(z[i+N:i+N+J])
-
-
-I=len(X) - K #number of training set
-
-Xtrain=np.asarray(X[:I])
-Ytrain=np.asarray(Y[:I])
-
-Xtest=np.asarray(X[I:])
-Ytest=np.asarray(Y[I:])
-
-#add a column of ones for the bias
-ones=np.ones((I, 1))
-Xtrain=np.concatenate((ones, Xtrain), axis=1)
-
-ones=np.ones((K, 1))
-Xtest=np.concatenate((ones, Xtest), axis=1)
-
-print("Done")
+        for i in range(len(z) - self.N - (self.J-1)):
+            X.append(z[i: i + self.N])
+            Y.append(z[i + self.N: i + self.N + self.J])
 
 
-##BGD
-def BGD():
-    theta = np.random.rand(N+1)*2-1
-    alpha=0.2
+        self.I = len(X) - self.K #number of training set
 
-    E=11
-    while E>10:
-        h=np.dot(theta,Xtrain.T)
-        g=h-Ytrain
+        self.Xtrain=np.asarray(X[:self.I])
+        self.Ytrain=np.asarray(Y[:self.I])
 
-        for n in range(N+1):
-            sum=0
-            for i in range(I):
-                sum += g[i]*Xtrain[i][n]
+        self.Xtest=np.asarray(X[self.I:])
+        self.Ytest=np.asarray(Y[self.I:])
 
-            theta[n] = theta[n] - alpha * sum
+        #add a column of ones for the bias
+        ones=np.ones((self.I, 1))
+        self.Xtrain=np.concatenate((ones, self.Xtrain), axis=1)
 
-        h=np.dot(theta,Xtrain.T)
-        E=np.sum(np.square(h-Ytrain))/2
-        #print(E)
+        ones=np.ones((self.K, 1))
+        self.Xtest=np.concatenate((ones, self.Xtest), axis=1)
 
-    return theta
+    def error(self, Yp):
+        E=np.sum(np.square(Yp.T-self.Ytrain))/2
+        return E
 
-##SGD
-def SGD():
-    theta = np.random.rand(N+1)*2-1
-    alpha=0.2
+    def trainBGD(self, alpha=0.2):
+        theta = np.random.rand(self.N+1)*2-1
 
-    E=11
-    while E>10:
-        h=np.dot(theta,Xtrain.T)
-        g=h-Ytrain
+        E=11
+        while E>10:
+            h=np.dot(theta,self.Xtrain.T)
+            g=h-self.Ytrain
 
-        for n in range(N+1):
-            i = np.random.randint(1, I)
-            theta[n] = theta[n] - alpha * g[i] * Xtrain[i][n]
+            for n in range(self.N+1):
+                sum=0
+                for i in range(self.I):
+                    sum += g[i] * self.Xtrain[i][n]
 
-        h=np.dot(theta,Xtrain.T)
-        E=np.sum(np.square(h-Ytrain))/2
-        #print(E)
+                theta[n] = theta[n] - alpha * sum
 
-    return theta
+            h=np.dot(theta, self.Xtrain.T)
+            E= self.error(h)
 
-##CFS
-def CFS():
-    theta = np.dot(np.dot(np.linalg.inv(np.dot(Xtrain.T, Xtrain)), Xtrain.T), Ytrain)
+        return theta
 
-    return theta
+    def trainSGD(self, alpha=0.2):
+        theta = np.random.rand(self.N+1)*2-1
 
-def computeError(Yp):
-    E=np.sum(np.square(Yp.T-Ytrain))/2
-    return E
+        E=11
+        while E>10:
+            h=np.dot(theta,self.Xtrain.T)
+            g=h-self.Ytrain
 
-"""
+            for n in range(self.N+1):
+                i = np.random.randint(1, self.I)
+                theta[n] = theta[n] - alpha * g[i] * self.Xtrain[i][n]
+
+            h=np.dot(theta,self.Xtrain.T)
+            E=self.error(h)
+
+        return theta
+
+    def trainCFS(self):
+        theta = np.dot(np.dot(np.linalg.inv(np.dot(self.Xtrain.T, self.Xtrain)), self.Xtrain.T), self.Ytrain)
+
+        return theta
+
+    def predict(self,theta):
+        Yp=np.dot(theta.T,self.Xtrain.T)
+        return Yp, self.error(Yp)
+
+print("\nQ2 Generating sets")
+prog = program(3, 150, 1)#K N J
+
+
+
 ##Q3
-print("\nQ3 BGD, computing... ",end="")
-thetaOptBGD=BGD()
-YpBGD=np.dot(thetaOptBGD.T,Xtrain.T)
-print("Done")
-
-E=computeError(YpBGD)
-print("\nError ",E)
+print("\nQ3 BGD")
+thetaOptBGD=prog.trainBGD()
+YpBGD, err = prog.predict(thetaOptBGD)
+print("\nError ",err)
 
 print("\nOptimal value for the parameters:")
 print(thetaOptBGD)
 
 ##Q4
-print("\nQ4 SGD, computing... ",end="")
-thetaOptSGD=SGD()
-YpSGD=np.dot(thetaOptSGD.T,Xtrain.T)
-print("Done")
-
-E=computeError(YpSGD)
-print("\nError ",E)
+print("\nQ4 SGD")
+thetaOptSGD=prog.trainSGD()
+YpSGD, err = prog.predict(thetaOptSGD)
+print("\nError ",err)
 
 print("\nOptimal value for the parameters:")
 print(thetaOptSGD)
-"""
-##Q5
-print("\nQ5 CFS, computing... ",end="")
-thetaOptCFS=CFS()
-YpCFS=np.dot(thetaOptCFS.T,Xtrain.T)
-print("Done")
 
-E=computeError(YpCFS)
-print("\nError ",E)
+##Q5
+print("\nQ5 CFS")
+thetaOptCFS=prog.trainCFS()
+YpCFS, err = prog.predict(thetaOptCFS)
+print("\nError ",err)
 
 print("\nOptimal value for the parameters:")
 print(thetaOptCFS)
