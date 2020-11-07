@@ -9,29 +9,29 @@ print("Getting Data...", end="")
 my_data = genfromtxt('data.csv', delimiter=',')
 
 t=my_data.T[0]
-z=my_data.T[1]
-#z=np.round(z,2)#A SUPPRIMER
+z=list(my_data.T[1])
 print("Done")
 
 ##Plot
-print("Q1 Printing plot...", end="")
+"""
+print("\nQ1 Printing plot...", end="")
 plt.plot(t,z)
-#plt.show()
+plt.show()
 print("Done")
-
+"""
 
 ##Variables
 K=3 #number of test set
 N=150 #number of features
 J=1 #size of a prediction
 
-print("Q2 Generating sets...", end="")
+print("\nQ2 Generating sets...", end="")
 X=[]
 Y=[]
 
-for i in range(len(z) - N):
+for i in range(len(z) - N - (J-1)):
     X.append(z[i:i+N])
-    Y.append(z[i+N])
+    Y.append(z[i+N:i+N+J])
 
 
 I=len(X) - K #number of training set
@@ -71,7 +71,7 @@ def BGD():
 
         h=np.dot(theta,Xtrain.T)
         E=np.sum(np.square(h-Ytrain))/2
-        print(E)
+        #print(E)
 
     return theta
 
@@ -91,7 +91,7 @@ def SGD():
 
         h=np.dot(theta,Xtrain.T)
         E=np.sum(np.square(h-Ytrain))/2
-        print(E)
+        #print(E)
 
     return theta
 
@@ -101,14 +101,76 @@ def CFS():
 
     return theta
 
-def computeError(theta):
-    h=np.dot(theta,Xtrain.T)
-    E=np.sum(np.square(h-Ytrain))/2
+def computeError(Yp):
+    E=np.sum(np.square(Yp.T-Ytrain))/2
     return E
 
-#thetaOpt=BGD()
-thetaOpt=SGD()
-#thetaOpt=CFS()
+"""
+##Q3
+print("\nQ3 BGD, computing... ",end="")
+thetaOptBGD=BGD()
+YpBGD=np.dot(thetaOptBGD.T,Xtrain.T)
+print("Done")
 
-E=computeError(thetaOpt)
-print("Error ",E)
+E=computeError(YpBGD)
+print("\nError ",E)
+
+print("\nOptimal value for the parameters:")
+print(thetaOptBGD)
+
+##Q4
+print("\nQ4 SGD, computing... ",end="")
+thetaOptSGD=SGD()
+YpSGD=np.dot(thetaOptSGD.T,Xtrain.T)
+print("Done")
+
+E=computeError(YpSGD)
+print("\nError ",E)
+
+print("\nOptimal value for the parameters:")
+print(thetaOptSGD)
+"""
+##Q5
+print("\nQ5 CFS, computing... ",end="")
+thetaOptCFS=CFS()
+YpCFS=np.dot(thetaOptCFS.T,Xtrain.T)
+print("Done")
+
+E=computeError(YpCFS)
+print("\nError ",E)
+
+print("\nOptimal value for the parameters:")
+print(thetaOptCFS)
+
+##Plot Q6
+print("\nQ6 Plotting prediction on the original dataset ...", end="")
+plt.plot(t[:I],Ytrain.T[0],"g")
+#plt.plot(t[:I],YpBGD,"y")
+#plt.plot(t[:I],YpSGD,"b")
+plt.plot(t[:I],YpCFS[0],"r")
+plt.show()
+print("Done")
+
+##Plot Q7
+print("\nQ7 Plotting prediction on the test dataset ...", end="")
+
+#YpBGD=np.dot(thetaOptBGD.T,Xtest.T)
+#YpSGD=np.dot(thetaOptSGD.T,Xtest.T)
+YpCFS=np.dot(thetaOptCFS.T,Xtest.T)
+
+plt.plot(t[-J:],Ytest[0],"g")
+#plt.plot(t[-K:],YpBGD,"y")
+#plt.plot(t[-K:],YpSGD,"b")
+for i in range(K-1):
+    plt.plot(t[-J-K+i+1:-K+i+1],YpCFS.T[i],"r")
+plt.plot(t[-J:],YpCFS.T[K-1],"r")
+
+plt.show()
+print("Done")
+
+
+
+
+
+
+
