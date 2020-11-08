@@ -106,6 +106,7 @@ class regression():
         plt.plot(t,YpBGD,"y", label="BGD")
         plt.plot(t,YpSGD,"b", label="SGD")
         plt.plot(t,YpCFS,"r", label="CFS")
+        plt.legend()
         plt.show()
 
     def plotQ7(self, YpCFS):
