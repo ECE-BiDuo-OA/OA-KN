@@ -1,0 +1,16 @@
+REPORT
+
+For the homework, we've created our self made library, you can see it in the lib.py file.
+We can adjust parameters when calling functions from this library.
+You can hide the error when training by setting showError to False.
+
+BGD & SGD are quite similar, but the SGD is faster and more efficient than the BGD
+The CFS method is much more precise and faster to compute.
+
+With J=1, the prediction is better than J=30.
+
+
+
+Made by
+Jogarajah Kishor
+Segard Neil
