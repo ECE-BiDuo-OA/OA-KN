@@ -105,7 +105,7 @@ class regression():
         plt.plot(t,Y,"g")
         plt.plot(t,YpBGD,"y")
         plt.plot(t,YpSGD,"b")
-        plt.plot(t,YpCFS[0],"r")
+        plt.plot(t,YpCFS,"r")
         plt.show()
 
     def plotQ7(self, YpCFS):
