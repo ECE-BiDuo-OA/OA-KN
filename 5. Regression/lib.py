@@ -12,10 +12,9 @@ np.set_printoptions(suppress=True)
 
 class regression():
     def __init__(self, K, N, J): #creation des Xtrain, Xtest, Ytrain, Ytest
-
         my_data = genfromtxt('data.csv', delimiter=',')
 
-        t=my_data.T[0]
+        self.t=my_data.T[0]
         z=list(my_data.T[1])
 
         self.K=K #number of test set
@@ -28,7 +27,6 @@ class regression():
         for i in range(len(z) - self.N - (self.J-1)):
             X.append(z[i: i + self.N])
             Y.append(z[i + self.N: i + self.N + self.J])
-
 
         self.I = len(X) - self.K #number of training set
 
@@ -45,6 +43,26 @@ class regression():
         ones=np.ones((self.K, 1))
         self.Xtest=np.concatenate((ones, self.Xtest), axis=1)
 
+    def plotQ6(self, YpBGD, YpSGD, YpCFS):
+        t = self.t[:self.I]
+        Y = self.Ytrain.T[0]
+        plt.plot(t,Y,"g")
+        plt.plot(t,YpBGD,"y")
+        plt.plot(t,YpSGD,"b")
+        plt.plot(t,YpCFS[0],"r")
+        plt.show()
+
+    def plotQ7(self, YpCFS):
+        plt.plot(self.t[-self.J:],self.Ytest[0],"g")
+        for i in range(self.K-1):
+            a = -self.K+i+1
+            start=-self.J + a
+
+            plt.plot(self.t[start:a], YpCFS.T[i], "r")
+        plt.plot(self.t[-self.J:], YpCFS.T[self.K-1], "r")
+
+        plt.show()
+
     def error(self, Yp):
         E=np.sum(np.square(Yp.T-self.Ytrain))/2
         return E
@@ -55,7 +73,7 @@ class regression():
         E=11
         while E>10:
             h=np.dot(theta,self.Xtrain.T)
-            g=h-self.Ytrain
+            g=h-self.Ytrain.T[0]
 
             for n in range(self.N+1):
                 sum=0
@@ -75,10 +93,10 @@ class regression():
         E=11
         while E>10:
             h=np.dot(theta,self.Xtrain.T)
-            g=h-self.Ytrain
+            g=h-self.Ytrain.T[0]
 
             for n in range(self.N+1):
-                i = np.random.randint(1, self.I)
+                i = 4#np.random.randint(1, self.I)
                 theta[n] = theta[n] - alpha * g[i] * self.Xtrain[i][n]
 
             h=np.dot(theta,self.Xtrain.T)
