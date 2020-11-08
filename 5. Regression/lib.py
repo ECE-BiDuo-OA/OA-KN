@@ -103,9 +103,9 @@ class regression():
         t = self.t[:self.I]
         Y = self.Ytrain.T[0]
         plt.plot(t,Y,"g")
-        plt.plot(t,YpBGD,"y")
-        plt.plot(t,YpSGD,"b")
-        plt.plot(t,YpCFS,"r")
+        plt.plot(t,YpBGD,"y", label="BGD")
+        plt.plot(t,YpSGD,"b", label="SGD")
+        plt.plot(t,YpCFS,"r", label="CFS")
         plt.show()
 
     def plotQ7(self, YpCFS):
