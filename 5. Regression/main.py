@@ -26,7 +26,7 @@ prog = regression(3, 150, 1)#K N J
 """
 ##Q3
 print("\nQ3 BGD")
-thetaOptBGD=prog.trainBGD()
+thetaOptBGD=prog.trainBGD(alpha=0.05, showError=True)
 YpBGD, err = prog.predict(thetaOptBGD)
 print("\nError ",err)
 
@@ -69,14 +69,8 @@ print("\nError ",err)
 print("\nOptimal value for the parameters:")
 print(thetaOptCFS)
 
-prog.plotQ7(YpCFS)
+prog30.plotQ7(YpCFS)
 
-plt.plot(t[-J:],Ytest[0],"g")
-for i in range(K-1):
-    plt.plot(t[-J-K+i+1:-K+i+1],YpCFS.T[i],"r")
-plt.plot(t[-J:],YpCFS.T[K-1],"r")
-
-plt.show()
 print("Done")
 
 

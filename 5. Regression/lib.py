@@ -67,8 +67,10 @@ class regression():
         E=np.sum(np.square(Yp.T-self.Ytrain))/2
         return E
 
-    def trainBGD(self, alpha=0.2):
+    def trainBGD(self, alpha=0.2, showError=False):
         theta = np.random.rand(self.N+1)*2-1
+
+        #self.Xtrain /= np.max(self.Xtrain)
 
         E=11
         while E>10:
@@ -82,12 +84,13 @@ class regression():
 
                 theta[n] = theta[n] - alpha * sum
 
-            h=np.dot(theta, self.Xtrain.T)
-            E= self.error(h)
+            h = np.dot(theta, self.Xtrain.T)
+            E = self.error(h)
+            if showError: print("Error:",E)
 
         return theta
 
-    def trainSGD(self, alpha=0.2):
+    def trainSGD(self, alpha=0.2, showError=False):
         theta = np.random.rand(self.N+1)*2-1
 
         E=11
@@ -101,6 +104,7 @@ class regression():
 
             h=np.dot(theta,self.Xtrain.T)
             E=self.error(h)
+            if showError: print("Error:",E)
 
         return theta
 
