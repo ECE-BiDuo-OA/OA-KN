@@ -48,7 +48,7 @@ class regression():
         self.Xtest=np.concatenate((ones, self.Xtest), axis=1)
 
     def error(self, Yp):
-        E=np.sum(np.square(Yp.T-self.Ytrain))/2
+        E=np.sum(np.square(Yp-self.Ytrain.T[0]))/2
         return E
 
     def trainBGD(self, targetError=10, alpha=0.001, showError=False):
