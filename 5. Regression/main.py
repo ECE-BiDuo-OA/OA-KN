@@ -23,25 +23,25 @@ print("\nQ2 Generating sets")
 prog = regression(3, 150, 1)#K N J
 
 
-"""
 ##Q3
 print("\nQ3 BGD")
-thetaOptBGD=prog.trainBGD(alpha=0.05, showError=True)
+thetaOptBGD=prog.trainBGD(alpha=0.001, showError=True)
 YpBGD, err = prog.predict(thetaOptBGD)
 print("\nError ",err)
 
 print("\nOptimal value for the parameters:")
 print(thetaOptBGD)
 
+exit(0)
 ##Q4
 print("\nQ4 SGD")
-thetaOptSGD=prog.trainSGD()
+thetaOptSGD=prog.trainSGD(alpha=0.001, showError=True)
 YpSGD, err = prog.predict(thetaOptSGD)
 print("\nError ",err)
 
 print("\nOptimal value for the parameters:")
 print(thetaOptSGD)
-"""
+
 ##Q5
 print("\nQ5 CFS")
 thetaOptCFS=prog.trainCFS()
@@ -53,8 +53,8 @@ print(thetaOptCFS)
 
 ##Plot Q6
 print("\nQ6 Plotting prediction on the original dataset ...", end="")
-YpBGD=YpCFS[0]
-YpSGD=YpCFS[0]
+YpBGD=YpCFS[0] ###############A SUPPRIMER
+YpSGD=YpCFS[0] ###############A SUPPRIMER
 #prog.plotQ6(YpBGD, YpSGD, YpCFS)
 print("Done")
 
