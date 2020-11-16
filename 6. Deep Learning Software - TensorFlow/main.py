@@ -30,8 +30,8 @@ z=my_data["z"]
 K = 10
 N = 150
 J = 1
-training_epochs=10
-learning_rate=0.00001
+training_epochs=500
+learning_rate=0.000001
 
 X = []
 Y = []
@@ -39,7 +39,6 @@ Y = []
 for i in range(len(z) - N - (J-1)):
     X.append(z[i: i + N])
     Y.append(z[i + N: i + N + J])
-
 
 I = len(X) - K #number of training set
 
@@ -56,7 +55,10 @@ Y = tf.compat.v1.placeholder(tf.float32, name='placeholder_Y')
 
 # Defines the model as y = theta*X
 def model(X, theta):
-    return tf.multiply(X, theta)
+    return tf.reduce_sum(tf.multiply(X, theta))
+
+def error(pred,real):
+    return np.sum(np.square(pred-real))
 
 # Sets up the weights variable
 theta = tf.Variable([0.0]*150, name="weights")
@@ -78,60 +80,25 @@ for epoch in range(training_epochs):
         # Updates the model parameter(s)
         sess.run(train_op, feed_dict={X: x, Y: y})
 
-    print(sess.run(theta)[0])
+    if (epoch+1)%20==0:
+        print("Epoch {}".format(epoch+1),end="")
+        theta_val = sess.run(theta)
+        y_pred = np.dot(Xtrain,theta_val)
+        print(": Error = {}".format(error(y_pred,Ytrain)))
 
 # Obtains the final parameter value
 theta_val = sess.run(theta)
+print("\nOptimal theta:")
+print(theta_val)
 
-# Closes the session
-#
-
-#print(theta_val)
+sess.close()
 
 ##Plotting the regression
-"""
-tensorList=[]
-for x in Xtrain:
-    tensorList.append(tf.convert_to_tensor(x, dtype=tf.float32))
-y_pred = sess.run(tensorList)
-"""
-#y_pred = sess.run(tf.convert_to_tensor(Xtrain))
+y_pred = np.dot(Xtrain,theta_val)
 
-X2 = tf.compat.v1.placeholder(tf.float32, shape=(1097,N), name='placeholder_X2')
-X3 = tf.compat.v1.placeholder(tf.float32, shape=(1097), name='placeholder_X3')
-
-y_pred = tf.compat.v1.placeholder(tf.float32, name="placeholder_y_pred")
-y_pred2 = tf.compat.v1.placeholder(tf.float32,shape=(1097), name="placeholder_y_pred2")
-
-try: 1#sess.run(y_pred, feed_dict={X:Xtrain[0]})
-except ValueError as e: print(e)
-
-try: 1#sess.run(y_pred, feed_dict={X2:Xtrain})
-except ValueError as e: print(e)
-
-try: 1#sess.run(y_pred2, feed_dict={X2:Xtrain})
-except ValueError as e: print(e)
-
-try: sess.run(y_pred, feed_dict={X3:Xtrain})
-except ValueError as e: print(e)
-
-try: sess.run(y_pred2, feed_dict={X3:Xtrain})
-except ValueError as e: print(e)
-
-softmax_tensor = sess.graph.get_tensor_by_name('final_ops/softmax:0')
-
-     predictions = self.sess.run(softmax_tensor, {'Placeholder:0': self.tfimages})
-
-
-"""
 plt.plot(t,z)
-plt.plot(t[-I:],y_pred)
+plt.plot(t[:I],y_pred, "r")
 plt.show()
-"""
-#sess.close()
-
-
-
 
 
 
