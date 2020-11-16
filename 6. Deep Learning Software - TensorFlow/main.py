@@ -22,11 +22,21 @@ from tensorflow.compat.v1 import InteractiveSession
 config = ConfigProto()
 config.gpu_options.allow_growth = True
 session = InteractiveSession(config=config)
+
 ##Getting data
 my_data = genfromtxt('https://raw.githubusercontent.com/ECE-BiDuo-OA/OA-KN/main/6.%20Deep%20Learning%20Software%20-%20TensorFlow/data.csv', delimiter=',',names=True)
 
 t=my_data["t"]
 z=my_data["z"]
+
+
+##Getting data Microsoft
+"""
+my_data = genfromtxt('https://raw.githubusercontent.com/ECE-BiDuo-OA/OA-KN/main/6.%20Deep%20Learning%20Software%20-%20TensorFlow/microsoft.csv', delimiter=',',names=True)
+
+z=my_data["Close"]
+t=list(range(len(z)))
+"""
 
 ##Q1 Plotting data
 plt.plot(t,z)
