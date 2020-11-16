@@ -23,15 +23,15 @@ t=my_data["t"]
 z=my_data["z"]
 
 ##Q1 Plotting data
-#plt.plot(t,z)
-#plt.show()
+plt.plot(t,z)
+plt.show()
 
 ##Q2 Splitting the data
-K = 10
+K = 200
 N = 150
 J = 1
 training_epochs=500
-learning_rate=0.000001
+learning_rate=0.00000005#0.000001
 
 X = []
 Y = []
@@ -43,12 +43,12 @@ for i in range(len(z) - N - (J-1)):
 I = len(X) - K #number of training set
 
 Xtrain=np.asarray(X[:I])
-Ytrain=np.asarray(Y[:I]).reshape(1097)
+Ytrain=np.asarray(Y[:I]).reshape(I)
 
 Xtest=np.asarray(X[I:])
-Ytest=np.asarray(Y[I:]).reshape(10)
+Ytest=np.asarray(Y[I:]).reshape(K)
 
-##Preparing the truc
+##Preparation
 # Sets up the input and output nodes as placeholders
 X = tf.compat.v1.placeholder(tf.float32, shape=[N], name='placeholder_X')
 Y = tf.compat.v1.placeholder(tf.float32, name='placeholder_Y')
@@ -75,16 +75,16 @@ init = tf.compat.v1.global_variables_initializer()
 sess.run(init)
 
 ##Training
+print("\nTraining...")
 for epoch in range(training_epochs):
     for (x, y) in zip(Xtrain, Ytrain):
         # Updates the model parameter(s)
         sess.run(train_op, feed_dict={X: x, Y: y})
 
     if (epoch+1)%20==0:
-        print("Epoch {}".format(epoch+1),end="")
         theta_val = sess.run(theta)
         y_pred = np.dot(Xtrain,theta_val)
-        print(": Error = {}".format(error(y_pred,Ytrain)))
+        print("Epoch {:3d}/{}: Error = {:.3f}".format(epoch+1,training_epochs,error(y_pred,Ytrain)))
 
 # Obtains the final parameter value
 theta_val = sess.run(theta)
@@ -93,11 +93,19 @@ print(theta_val)
 
 sess.close()
 
-##Plotting the regression
+##Plotting the regression on the original dataset
 y_pred = np.dot(Xtrain,theta_val)
 
-plt.plot(t,z)
+plt.plot(t[:I],Ytrain)
 plt.plot(t[:I],y_pred, "r")
+plt.show()
+
+##Plotting the regression on the test dataset
+y_pred = np.dot(Xtest,theta_val)
+print("Error on the test set = {}".format(error(y_pred,Ytest)))
+
+plt.plot(t[N+I:],Ytest)
+plt.plot(t[N+I:],y_pred, "r")
 plt.show()
 
 
