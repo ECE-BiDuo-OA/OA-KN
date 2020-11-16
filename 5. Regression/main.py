@@ -14,6 +14,7 @@ np.set_printoptions(suppress=True)
 print("\nQ2 Generating sets")
 prog = regression(3, 150, 1)#K N J
 
+
 ##Q3
 print("\nQ3 BGD")
 thetaOptBGD=prog.trainBGD(alpha=0.00001, showError=True, targetError=40)

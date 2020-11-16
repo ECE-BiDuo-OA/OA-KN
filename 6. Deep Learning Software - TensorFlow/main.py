@@ -48,7 +48,7 @@ Ytrain=np.asarray(Y[:I]).reshape(I)
 Xtest=np.asarray(X[I:])
 Ytest=np.asarray(Y[I:]).reshape(K)
 
-##Preparation
+##Q3 Preparation
 # Sets up the input and output nodes as placeholders
 X = tf.compat.v1.placeholder(tf.float32, shape=[N], name='placeholder_X')
 Y = tf.compat.v1.placeholder(tf.float32, name='placeholder_Y')
@@ -93,14 +93,14 @@ print(theta_val)
 
 sess.close()
 
-##Plotting the regression on the original dataset
+##Q4 Plotting the regression on the original dataset
 y_pred = np.dot(Xtrain,theta_val)
 
 plt.plot(t[:I],Ytrain)
 plt.plot(t[:I],y_pred, "r")
 plt.show()
 
-##Plotting the regression on the test dataset
+##Q5 Plotting the regression on the test dataset
 y_pred = np.dot(Xtest,theta_val)
 print("Error on the test set = {}".format(error(y_pred,Ytest)))
 
@@ -108,7 +108,7 @@ plt.plot(t[N+I:],Ytest)
 plt.plot(t[N+I:],y_pred, "r")
 plt.show()
 
-
-
+##Q6 Plotting the regression on the test dataset
+print("CFS is more accurate and faster than tensorflow\nTensorflow is like to be more powerful than CFS but in our case (small problem) CFS is better")
 
 
