@@ -1,4 +1,10 @@
-#!pip install tensorflow==1.15.4
+"""
+Made by
+    SEGARD Neil
+    JOGARAJAH Kishor
+"""
+
+
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import numpy as np
@@ -102,13 +108,13 @@ plt.show()
 
 ##Q5 Plotting the regression on the test dataset
 y_pred = np.dot(Xtest,theta_val)
-print("Error on the test set = {}".format(error(y_pred,Ytest)))
+print("\nError on the test set = {}".format(error(y_pred,Ytest)))
 
 plt.plot(t[N+I:],Ytest)
 plt.plot(t[N+I:],y_pred, "r")
 plt.show()
 
 ##Q6 Plotting the regression on the test dataset
-print("CFS is more accurate and faster than tensorflow\nTensorflow is like to be more powerful than CFS but in our case (small problem) CFS is better")
+print("\n\nREPORT\nCFS is more accurate and faster than tensorflow.\nTensorflow is like to be more powerful than CFS but in our case (small problem) CFS is better.")
 
 

@@ -1,0 +1,12 @@
+Made by:
+SEGARD Neil
+JOGARAJAH Kishor
+
+We made a lot of comments in the code. Here is the report for the last question.
+
+
+REPORT
+CFS is more accurate and faster than tensorflow.
+Tensorflow is like to be more powerful than CFS but in our case (small problem) CFS is better.
+
+Best Regards
